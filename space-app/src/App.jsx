@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import EstilosGlobais from './componentes/EstilosGlobais';
@@ -5,11 +6,12 @@ import Cabecalho from './componentes/Cabecalho';
 import BarraLateral from './componentes/BarraLateral';
 import Banner from './componentes/Banner';
 import Galeria from './componentes/Galeria';
+import Rodape from './componentes/Rodape';
+import ModalZoom from './componentes/ModalZoom';
 import bannerBackground from './assets/banner.png'
 
 import fotos from './fotos.json';
-import { useState } from 'react';
-import ModalZoom from './componentes/ModalZoom';
+
 
 const FundoGradiente = styled.div`
   background: linear-gradient(174.61deg, #041833 4.16%, #04244F 48%, #154580 96.76%);
@@ -36,13 +38,25 @@ const ConteudoGaleria = styled.section`
 
 const App = () => {
   const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos);
-  const [fotoSelecionada, setFotoSelecionada] = useState(null);
+  const [filtro, setFiltro] = useState('');
+  const [tag, setTag] = useState(0);
+  const [fotoComZoom, setFotoComZoom] = useState(null);
+
+  useEffect(() => {
+    const fotosFiltradas = fotos.filter(foto => {
+      const filtroPorTag = !tag || foto.tagId === tag;
+      const filtroPorTitulo = !filtro || foto.titulo.toLowerCase().includes(filtro.toLowerCase());
+      return filtroPorTag && filtroPorTitulo;
+    });
+
+    setFotosDaGaleria(fotosFiltradas);
+  }, [filtro, tag]);
 
   const aoAlternarFavorito = (foto) => {
-    if (foto.id === fotoSelecionada?.id) {
-      setFotoSelecionada({
-        ...fotoSelecionada,
-        favorita: !fotoSelecionada.favorita
+    if (foto.id === fotoComZoom?.id) {
+      setFotoComZoom({
+        ...fotoComZoom,
+        favorita: !fotoComZoom.favorita
       });
     }
   
@@ -59,7 +73,10 @@ const App = () => {
       <FundoGradiente>
         <EstilosGlobais />
         <AppContainer>
-          <Cabecalho />
+          <Cabecalho
+            filtro={filtro}
+            setFiltro={setFiltro}
+          />
           <MainContainer>
             <BarraLateral />
             <ConteudoGaleria>
@@ -69,20 +86,22 @@ const App = () => {
               />
               <Galeria
                 aoFotoSelecionada={foto => {
-                  setFotoSelecionada(foto);
+                  setFotoComZoom(foto);
                   window.scrollTo(0, 280);
                 }}
                 aoAlternarFavorito={aoAlternarFavorito}
                 fotos={fotosDaGaleria}
+                setTag={setTag}
               />
             </ConteudoGaleria>
           </MainContainer>
         </AppContainer>
         <ModalZoom
-          foto={fotoSelecionada}
-          aoFechar={() => setFotoSelecionada(null)}
+          foto={fotoComZoom}
+          aoFechar={() => setFotoComZoom(null)}
           aoAlternarFavorito={aoAlternarFavorito}
         />
+        <Rodape />
       </FundoGradiente>
     </>
   )
