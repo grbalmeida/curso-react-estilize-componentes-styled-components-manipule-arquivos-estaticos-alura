@@ -38,6 +38,10 @@ const App = () => {
   const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
 
+  const aoAlternarFavorito = (foto) => {
+    console.log(foto); 
+  }
+
   return (
     <>
       <FundoGradiente>
@@ -56,6 +60,7 @@ const App = () => {
                   setFotoSelecionada(foto);
                   window.scrollTo(0, 280);
                 }}
+                aoAlternarFavorito={aoAlternarFavorito}
                 fotos={fotosDaGaleria}
               />
             </ConteudoGaleria>
