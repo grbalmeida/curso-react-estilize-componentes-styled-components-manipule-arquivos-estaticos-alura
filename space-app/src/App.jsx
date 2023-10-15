@@ -9,6 +9,7 @@ import bannerBackground from './assets/banner.png'
 
 import fotos from './fotos.json';
 import { useState } from 'react';
+import ModalZoom from './componentes/ModalZoom';
 
 const FundoGradiente = styled.div`
   background: linear-gradient(174.61deg, #041833 4.16%, #04244F 48%, #154580 96.76%);
@@ -55,6 +56,7 @@ const App = () => {
             </ConteudoGaleria>
           </MainContainer>
         </AppContainer>
+        <ModalZoom />
       </FundoGradiente>
     </>
   )
