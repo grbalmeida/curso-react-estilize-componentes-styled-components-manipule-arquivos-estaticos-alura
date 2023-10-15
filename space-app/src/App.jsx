@@ -52,7 +52,10 @@ const App = () => {
                 backgroundImage={bannerBackground}
               />
               <Galeria
-                aoFotoSelecionada={foto => setFotoSelecionada(foto)}
+                aoFotoSelecionada={foto => {
+                  setFotoSelecionada(foto);
+                  window.scrollTo(0, 280);
+                }}
                 fotos={fotosDaGaleria}
               />
             </ConteudoGaleria>
@@ -60,6 +63,7 @@ const App = () => {
         </AppContainer>
         <ModalZoom
           foto={fotoSelecionada}
+          aoFechar={() => setFotoSelecionada(null)}
         />
       </FundoGradiente>
     </>
